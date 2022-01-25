@@ -46,8 +46,8 @@ private let IHProgressHUDLabelSpacing: CGFloat = 8.0
 
 public class IHProgressHUD : UIView {
     
-    static var isNotAppExtension = true
-    static var controlView: UIControl?
+    private static var isNotAppExtension = true
+    private static var controlView: UIControl?
 
     private var defaultStyle = IHProgressHUDStyle.light
     private var defaultMaskType = IHProgressHUDMaskType.none
@@ -1068,7 +1068,7 @@ extension IHProgressHUD {
     public class func set(viewForExtension view: UIView) {
         IHProgressHUD.isNotAppExtension = false
         IHProgressHUD.controlView?.removeFromSuperview()
-        IHProgressHUD.controlView = nil        
+        IHProgressHUD.controlView = nil
         sharedView.viewForExtension = view
     } // default is nil, only used if #define SV_APP_EXTENSIONS is set
     
