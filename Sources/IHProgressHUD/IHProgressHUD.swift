@@ -46,8 +46,9 @@ private let IHProgressHUDLabelSpacing: CGFloat = 8.0
 
 public class IHProgressHUD : UIView {
     
-    static var isNotAppExtension = true
-    
+    private static var isNotAppExtension = true
+    private static var controlView: UIControl?
+
     private var defaultStyle = IHProgressHUDStyle.light
     private var defaultMaskType = IHProgressHUDMaskType.none
     private var defaultAnimationType = IHProgressHUDAnimationType.flat
@@ -77,7 +78,6 @@ public class IHProgressHUD : UIView {
     private var hapticsEnabled = false
     private var graceTimer: Timer?
     private var fadeOutTimer: Timer?
-    private var controlView: UIControl?
     private var backgroundView: UIView?
     private var backgroundRadialGradientLayer: RadialGradientLayer?
     private var hudView: UIVisualEffectView?
@@ -1067,6 +1067,8 @@ extension IHProgressHUD {
     
     public class func set(viewForExtension view: UIView) {
         IHProgressHUD.isNotAppExtension = false
+        IHProgressHUD.controlView?.removeFromSuperview()
+        IHProgressHUD.controlView = nil
         sharedView.viewForExtension = view
     } // default is nil, only used if #define SV_APP_EXTENSIONS is set
     
@@ -1292,22 +1294,22 @@ extension IHProgressHUD {
     }
     
     private func getControlView() -> UIControl {
-        if controlView == nil {
-            controlView = UIControl.init()
-            controlView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            controlView?.backgroundColor = .clear
-            controlView?.isUserInteractionEnabled = true
-            controlView?.addTarget(self, action: #selector(controlViewDidReceiveTouchEvent(_:for:)), for: .touchDown)
+        if IHProgressHUD.controlView == nil {
+            IHProgressHUD.controlView = UIControl.init()
+            IHProgressHUD.controlView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            IHProgressHUD.controlView?.backgroundColor = .clear
+            IHProgressHUD.controlView?.isUserInteractionEnabled = true
+            IHProgressHUD.controlView?.addTarget(self, action: #selector(controlViewDidReceiveTouchEvent(_:for:)), for: .touchDown)
         }
         if IHProgressHUD.isNotAppExtension {
             if let windowBounds : CGRect = UIApplication.shared.delegate?.window??.bounds {
-                controlView?.frame = windowBounds
+                IHProgressHUD.controlView?.frame = windowBounds
             }
         }
         else {
-            controlView?.frame = UIScreen.main.bounds
+            IHProgressHUD.controlView?.frame = UIScreen.main.bounds
         }
-        return controlView!
+        return IHProgressHUD.controlView!
     }
     
     private func loadImageBundle(named imageName:String) -> UIImage? {
