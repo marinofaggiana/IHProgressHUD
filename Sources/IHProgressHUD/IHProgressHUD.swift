@@ -1067,7 +1067,8 @@ extension IHProgressHUD {
     
     public class func set(viewForExtension view: UIView) {
         IHProgressHUD.isNotAppExtension = false
-        IHProgressHUD.controlView = nil
+        IHProgressHUD.controlView?.removeFromSuperview()
+        IHProgressHUD.controlView = nil        
         sharedView.viewForExtension = view
     } // default is nil, only used if #define SV_APP_EXTENSIONS is set
     
