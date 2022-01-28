@@ -48,6 +48,7 @@ public class IHProgressHUD : UIView {
     
     private static var isNotAppExtension = true
     private static var controlView: UIControl?
+    private static var hudView: UIVisualEffectView?
 
     private var defaultStyle = IHProgressHUDStyle.light
     private var defaultMaskType = IHProgressHUDMaskType.none
@@ -80,7 +81,6 @@ public class IHProgressHUD : UIView {
     private var fadeOutTimer: Timer?
     private var backgroundView: UIView?
     private var backgroundRadialGradientLayer: RadialGradientLayer?
-    private var hudView: UIVisualEffectView?
     private var hudViewCustomBlurEffect: UIBlurEffect?
     private var statusLabel: UILabel?
     private var imageView: UIImageView?
@@ -1067,6 +1067,8 @@ extension IHProgressHUD {
     
     public class func set(viewForExtension view: UIView) {
         IHProgressHUD.isNotAppExtension = false
+        IHProgressHUD.hudView?.removeFromSuperview()
+        IHProgressHUD.hudView = nil
         IHProgressHUD.controlView?.removeFromSuperview()
         IHProgressHUD.controlView = nil
         sharedView.viewForExtension = view
@@ -1232,20 +1234,20 @@ extension IHProgressHUD {
     }
     
     private func getHudView() -> UIVisualEffectView {
-        if hudView == nil {
+        if IHProgressHUD.hudView == nil {
             let tmphudView = UIVisualEffectView()
             tmphudView.layer.masksToBounds = true
             tmphudView.autoresizingMask = [.flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
-            hudView = tmphudView
-            hudView?.accessibilityLabel = "HUD View"
+            IHProgressHUD.hudView = tmphudView
+            IHProgressHUD.hudView?.accessibilityLabel = "HUD View"
         }
         
-        if hudView?.superview == nil {
-            self.addSubview(hudView!)
+        if IHProgressHUD.hudView?.superview == nil {
+            self.addSubview(IHProgressHUD.hudView!)
         }
         
-        hudView?.layer.cornerRadius = cornerRadius
-        return hudView!
+        IHProgressHUD.hudView?.layer.cornerRadius = cornerRadius
+        return IHProgressHUD.hudView!
     }
     
     private func getBackGroundView() -> UIView {
